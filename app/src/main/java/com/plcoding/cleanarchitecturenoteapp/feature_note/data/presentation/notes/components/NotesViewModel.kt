@@ -9,6 +9,7 @@ import com.plcoding.cleanarchitecturenoteapp.feature_note.data.domain.model.Note
 import com.plcoding.cleanarchitecturenoteapp.feature_note.data.domain.use_case.DeleteNote
 import com.plcoding.cleanarchitecturenoteapp.feature_note.data.domain.use_case.NoteUseCases
 import com.plcoding.cleanarchitecturenoteapp.feature_note.data.domain.util.NoteOrder
+import com.plcoding.cleanarchitecturenoteapp.feature_note.data.domain.util.OrderType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
@@ -27,6 +28,10 @@ class NotesViewModel @Inject constructor(
     private var recentlyDeleteNote: Note? = null
 
     private var getNotesJob: Job? = null
+
+    init {
+        getNotes(NoteOrder.Date(OrderType.Descending))
+    }
 
     fun onEvent(event: NotesEvent) {
         when(event) {
