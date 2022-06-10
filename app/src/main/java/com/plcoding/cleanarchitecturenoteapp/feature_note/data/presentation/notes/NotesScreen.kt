@@ -20,6 +20,7 @@ import com.plcoding.cleanarchitecturenoteapp.feature_note.data.presentation.note
 import com.plcoding.cleanarchitecturenoteapp.feature_note.data.presentation.notes.components.NotesEvent
 import com.plcoding.cleanarchitecturenoteapp.feature_note.data.presentation.notes.components.NotesViewModel
 import com.plcoding.cleanarchitecturenoteapp.feature_note.data.presentation.notes.components.OrderSection
+import com.plcoding.cleanarchitecturenoteapp.feature_note.data.presentation.util.Screen
 import kotlinx.coroutines.launch
 
 @ExperimentalAnimationApi
@@ -36,7 +37,7 @@ fun NotesScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-
+                          navController.navigate(Screen.AddEditNoteScreen.rout)
                 },
                 backgroundColor = MaterialTheme.colors.primary
             ) {
@@ -91,7 +92,9 @@ fun NotesScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
-
+                                       navController.navigate(
+                                           Screen.AddEditNoteScreen.rout + "?noteId=${note.id}&noteColor=${note.color}"
+                                       )
                             },
                         onDeleteClick = {
                             viewModel.onEvent(NotesEvent.DeleteNote(note))
