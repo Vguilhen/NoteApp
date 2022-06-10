@@ -122,7 +122,7 @@ fun AddEditNoteScreen(
                 onValueChange = {
                     viewModel.onEvent(AddEditNoteEvent.EnteredTitle(it))
                 },
-                onFolcusChange = {
+                onFocusChange = {
                     viewModel.onEvent(AddEditNoteEvent.ChangeTitleFocus(it))
                 },
                 isHintVisible = titleState.isHintVisible,
@@ -136,7 +136,7 @@ fun AddEditNoteScreen(
                 onValueChange = {
                     viewModel.onEvent(AddEditNoteEvent.EnteredContent(it))
                 },
-                onFolcusChange = {
+                onFocusChange = {
                     viewModel.onEvent(AddEditNoteEvent.ChangeContentFocus(it))
                 },
                 isHintVisible = contentState.isHintVisible,

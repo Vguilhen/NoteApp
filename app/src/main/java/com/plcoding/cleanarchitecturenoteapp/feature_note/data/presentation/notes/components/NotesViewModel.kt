@@ -4,9 +4,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.plcoding.cleanarchitecturenoteapp.feature_note.data.domain.model.Note
-import com.plcoding.cleanarchitecturenoteapp.feature_note.data.domain.use_case.DeleteNote
 import com.plcoding.cleanarchitecturenoteapp.feature_note.data.domain.use_case.NoteUseCases
 import com.plcoding.cleanarchitecturenoteapp.feature_note.data.domain.util.NoteOrder
 import com.plcoding.cleanarchitecturenoteapp.feature_note.data.domain.util.OrderType
@@ -25,7 +23,7 @@ class NotesViewModel @Inject constructor(
     private val _state = mutableStateOf(NotesState())
     val state: State<NotesState> = _state
 
-    private var recentlyDeleteNote: Note? = null
+    private var recentlyDeletedNote: Note? = null
 
     private var getNotesJob: Job? = null
 
@@ -36,7 +34,7 @@ class NotesViewModel @Inject constructor(
     fun onEvent(event: NotesEvent) {
         when(event) {
             is NotesEvent.Order -> {
-                if(state.value.noteOrder::class != event.noteOrder::class &&
+                if(state.value.noteOrder::class == event.noteOrder::class &&
                         state.value.noteOrder.orderType == event.noteOrder.orderType
                 ) {
                     return
@@ -46,14 +44,14 @@ class NotesViewModel @Inject constructor(
             is NotesEvent.DeleteNote -> {
                 viewModelScope.launch {
                     noteUseCases.deleteNote(event.note)
-                    recentlyDeleteNote = event.note
+                    recentlyDeletedNote = event.note
                 }
 
             }
             is NotesEvent.RestoreNote -> {
                 viewModelScope.launch {
-                    noteUseCases.addNote(recentlyDeleteNote ?: return@launch)
-                    recentlyDeleteNote = null
+                    noteUseCases.addNote(recentlyDeletedNote ?: return@launch)
+                    recentlyDeletedNote = null
                 }
 
             }
@@ -61,7 +59,6 @@ class NotesViewModel @Inject constructor(
                 _state.value = state.value.copy(
                     isOrderSectionVisible = !state.value.isOrderSectionVisible
                 )
-
             }
         }
     }
@@ -70,10 +67,10 @@ class NotesViewModel @Inject constructor(
         getNotesJob = noteUseCases.getNotes(noteOrder)
             .onEach { notes ->
                 _state.value = state.value.copy(
+                    notes = notes,
                     noteOrder = noteOrder
                 )
             }
             .launchIn(viewModelScope)
     }
-
 }

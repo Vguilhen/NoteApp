@@ -31,7 +31,6 @@ class AddEditNoteViewModel @Inject constructor(
     ))
     val noteContent: State<NoteTextFieldState> = _noteContent
 
-    //*****Verificar a variavel
     private val _noteColor = mutableStateOf(Note.noteColors.random().toArgb())
     val noteColor: State<Int> = _noteColor
 
@@ -41,7 +40,7 @@ class AddEditNoteViewModel @Inject constructor(
     private var currentNoteId: Int? = null
 
     init {
-        savedStateHandle.get<Int>("noteID")?.let { noteId ->
+        savedStateHandle.get<Int>("noteId")?.let { noteId ->
             if (noteId != -1) {
                 viewModelScope.launch {
                     noteUseCases.getNote(noteId)?.also { note ->
@@ -107,7 +106,6 @@ class AddEditNoteViewModel @Inject constructor(
                                 message = e.message ?: "Couldn't save note"
                             )
                         )
-
                     }
                 }
             }
