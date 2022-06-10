@@ -31,8 +31,9 @@ class AddEditNoteViewModel @Inject constructor(
     ))
     val noteContent: State<NoteTextFieldState> = _noteContent
 
+    //*****Verificar a variavel
     private val _noteColor = mutableStateOf(Note.noteColors.random().toArgb())
-    val noteColor: State<NoteTextFieldState> = _noteTitle
+    val noteColor: State<Int> = _noteColor
 
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
@@ -95,8 +96,7 @@ class AddEditNoteViewModel @Inject constructor(
                                 title = noteTitle.value.text,
                                 content = noteContent.value.text,
                                 timestamp = System.currentTimeMillis(),
-                                //** ERRO VERIFICAR
-                                color = _noteColor.value,
+                                color = noteColor.value,
                                 id = currentNoteId
                             )
                         )
